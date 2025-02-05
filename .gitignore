@@ -1,0 +1,15 @@
+# macOS固有のファイルを無視
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ビルド出力を無視
+dist/
+build/
+
+*.log
+
+# 環境変数ファイルを無視
+.env
+
+__pycache__/
