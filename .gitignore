@@ -13,3 +13,9 @@ build/
 .env
 
 __pycache__/
+
+*.mp3
+*.m4a
+*.png
+*.jpg
+*.jpeg
