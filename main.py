@@ -12,30 +12,38 @@ from modules.cleanup import cleanup
 
 import os
 
-# XXX: dropbox workaround
+
+# Dropbox workaround
 async def dropbox_workaround(title):
     if os.path.exists(f".thumbnail.jpg"):
         os.remove(".thumbnail.jpg")
     if os.path.exists(f".{title}.mp3"):
         os.rename(f".{title}.mp3", f"{title}.mp3")
-    print("[green bold]Dropbox workaround completed.[/green bold]")
+    print("[blue bold]Dropbox workaround completed.[/blue bold]")
 
-async def main():
-    YOUTUBE_URL = get_args()
+
+async def youtube_to_mp3(url):
     try:
-        await download_thumbnail(YOUTUBE_URL)
+        await download_thumbnail(url)
         await crop_image()
-        title = await get_video_title(YOUTUBE_URL)
-        await download_audio(YOUTUBE_URL, title)
+        title = await get_video_title(url)
+        await download_audio(url, title)
         await set_cover(title)
         upload_status = await upload_to_dropbox(f".{title}.mp3", f"{title}.mp3")
         if upload_status:
             await cleanup(title)
         else:
             await dropbox_workaround(title)
-            
+
     except Exception as e:
         print(f"[red bold]Error: {e}[/red bold]")
+
+
+async def main():
+    YOUTUBE_URLs = get_args()
+    for url in YOUTUBE_URLs:
+        await youtube_to_mp3(url)
+
 
 if __name__ == "__main__":
     asyncio.run(main())
